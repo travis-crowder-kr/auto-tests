@@ -47,4 +47,6 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          ~/.local/bin/auto version
+          echo "======================================="
           ~/.local/bin/auto shipit -d
