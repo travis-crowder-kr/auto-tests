@@ -1,0 +1,50 @@
+# See: https://docs.github.com/en/free-pro-team@latest/actions/reference
+
+name: Next Version Test
+
+# - see https://docs.github.com/en/actions/reference/events-that-trigger-workflows
+# - see https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#onevent_nametypes
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+defaults:
+  run:
+    shell: bash --noprofile --norc -o pipefail {0}
+
+jobs:
+  # setup, run tests and publish
+  # on pr, setup and tests are run
+  # on push/merge, publish is run
+  main:
+    environment: main
+    runs-on: ubuntu-latest
+    steps:
+      # checkout self; this must be first so the .gitconfig is generated
+      - name: Clone self
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      # setup GitHub Actions post back config
+      - name: Setup GitHub config
+        run: |
+          git config user.name "GitHub Actions" && git config user.email "no-reply@kroger.com"
+
+      # install documentation tools
+      - name: Install tools
+        run: |
+          mkdir -p ~/.local/bin && npm config set prefix ~/.local/ && \
+          npm install -g auto @auto-it/git-tag
+      
+      - name: Run doc tools
+        # only run on PRs
+        if: ${{ github.event_name == 'pull_request' }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ~/.local/bin/auto shipit -d

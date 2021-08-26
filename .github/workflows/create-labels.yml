@@ -1,0 +1,39 @@
+name: GitHub Labels Creator
+
+# Creates GitHub Labels utiliing Auto
+# https://intuit.github.io/auto/index
+
+# - see https://docs.github.com/en/actions/reference/events-that-trigger-workflows
+# - see https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#onevent_nametypes
+on: workflow_dispatch
+
+defaults:
+  run:
+    shell: bash --noprofile --norc -o pipefail {0}
+
+jobs:
+  create:
+    environment: main
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone self
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Install Auto
+        run: |
+          mkdir -p ~/.local/bin && npm config set prefix ~/.local/ && \
+          npm install -g auto @auto-it/git-tag
+
+      - name: Create GitHub Labels
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ~/.local/bin/auto create-labels
+        
+      - name: Create Initial GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ~/.local/bin/auto shipit
