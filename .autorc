@@ -5,6 +5,5 @@
   "owner": "travis-crowder-kr",
   "repo": "auto-tests",
   "name": "GitHub Bot",
-  "email": "no-reply@kroger.com",
-  "onlyPublishWithReleaseLabel": true
+  "email": "no-reply@kroger.com"
 }
