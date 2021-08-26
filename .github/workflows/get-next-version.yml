@@ -39,7 +39,7 @@ jobs:
       - name: Install tools
         run: |
           mkdir -p ~/.local/bin && npm config set prefix ~/.local/ && \
-          npm install -g doctoc auto @auto-it/git-tag && \
+          npm install -g auto @auto-it/git-tag
       
       - name: Run doc tools
         # only run on PRs

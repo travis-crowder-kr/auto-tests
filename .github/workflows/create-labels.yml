@@ -23,7 +23,8 @@ jobs:
 
       - name: Install Auto
         run: |
-          mkdir -p ~/.local/bin && npm config set prefix ~/.local/ && npm install -g auto @auto-it/git-tag
+          mkdir -p ~/.local/bin && npm config set prefix ~/.local/ && \
+          npm install -g auto @auto-it/git-tag
 
       - name: Create GitHub Labels
         env:
